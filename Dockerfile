@@ -6,7 +6,7 @@ RUN apk --update add asterisk asterisk-cdr-mysql asterisk-speex asterisk-sounds-
 # Run scripts
 ADD scripts/run.sh /scripts/run.sh
 
-RUN chmod -R 755 /scripts && chmod a+rw /etc/passwd
+RUN chmod -R 755 /scripts /var/log /etc/asterisk && chmod a+rw /etc/passwd /var/log/asterisk /etc/asterisk
 
 # Exposed Port SIP
 EXPOSE 5060/udp
