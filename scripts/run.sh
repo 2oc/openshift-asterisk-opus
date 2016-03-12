@@ -13,6 +13,4 @@ echo "oc:x:`id -u`:0:oc:/:/sbin/nologin" >> /etc/passwd
 
 echo "[${STAMP}] Starting daemon..."
 # run asterisk daemon
-/usr/sbin/asterisk
-
-sleep 1d;
+/usr/sbin/asterisk -vvv
