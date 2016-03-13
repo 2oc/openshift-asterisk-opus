@@ -1,7 +1,9 @@
 FROM gliderlabs/alpine
 MAINTAINER Joeri van Dooren <ure@mororless.be>
 
-RUN apk --update add asterisk asterisk-cdr-mysql asterisk-speex asterisk-sounds-moh asterisk-sounds-en asterisk-curl asterisk-srtp asterisk-pgsql asterisk-fax && rm -f /var/cache/apk/*
+RUN apk --update add asterisk asterisk-cdr-mysql asterisk-speex asterisk-sounds-moh asterisk-sounds-en asterisk-curl  asterisk-pgsql asterisk-fax && rm -f /var/cache/apk/*
+
+#RUN apk --update add asterisk asterisk-cdr-mysql asterisk-speex asterisk-sounds-moh asterisk-sounds-en asterisk-curl asterisk-srtp asterisk-pgsql asterisk-fax && rm -f /var/cache/apk/*
 
 # Run scripts
 ADD scripts/run.sh /scripts/run.sh
