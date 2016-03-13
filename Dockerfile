@@ -8,7 +8,7 @@ RUN rpm --import https://ast.tucny.com/repo/RPM-GPG-KEY-dtucny && yum -y install
 # Run scripts
 ADD scripts/run.sh /scripts/run.sh
 
-RUN chmod -R 755 /scripts /var/log /etc/asterisk /var/run/asterisk && chmod a+rw /etc/passwd /var/log/asterisk /etc/asterisk /var/run/asterisk /var/lib/asterisk
+RUN chmod -R 755 /scripts /var/log /etc/asterisk /var/run/asterisk && chmod a+rw /etc/passwd /var/log/asterisk /etc/asterisk /var/run/asterisk /var/lib/asterisk /var/spool/asterisk
 
 # Exposed Port SIP
 EXPOSE 5060/udp
