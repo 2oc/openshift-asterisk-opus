@@ -3,7 +3,7 @@ MAINTAINER Joeri van Dooren <ure@mororless.be>
 
 ADD tucny-asterisk.repo /etc/yum.repos.d/tucny-asterisk.repo
 
-RUN rpm --import https://ast.tucny.com/repo/RPM-GPG-KEY-dtucny && (cd /tmp; wget http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm; rpm -ivh /tmp/epel-release-7-5.noarch.rpm) && yum -y install asterisk asterisk-fax asterisk-sip && yum clean all -y
+RUN rpm --import https://ast.tucny.com/repo/RPM-GPG-KEY-dtucny && yum install wget && (cd /tmp; wget http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm; rpm -ivh /tmp/epel-release-7-5.noarch.rpm) && yum -y install asterisk asterisk-fax asterisk-sip && yum clean all -y
 
 # Run scripts
 ADD scripts/run.sh /scripts/run.sh
