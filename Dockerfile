@@ -1,9 +1,10 @@
-FROM centos:7
+FROM alpine:3.3
 MAINTAINER Joeri van Dooren <ure@mororless.be>
 
-ADD tucny-asterisk.repo /etc/yum.repos.d/tucny-asterisk.repo
-
-RUN rpm --import https://ast.tucny.com/repo/RPM-GPG-KEY-dtucny && yum -y install wget && (cd /tmp; wget http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm; rpm -ivh /tmp/epel-release-7-5.noarch.rpm) && yum -y install asterisk asterisk-fax asterisk-sip && yum clean all -y && rm -fr /etc/asterisk/*
+RUN apk update && apk add tar rsync wget curl asterisk asterisk-sounds-en asterisk-sounds-moh asterisk-sample-config  && \
+rm -f /var/cache/apk/* && \
+apk upgrade && \
+rm -f /var/cache/apk/*
 
 # Run scripts
 ADD scripts/run.sh /scripts/run.sh
@@ -21,8 +22,8 @@ WORKDIR /etc/asterisk
 ENTRYPOINT ["/scripts/run.sh"]
 
 # Set labels used in OpenShift to describe the builder images
-LABEL io.k8s.description="Centos linux based Asterisk Container" \
-      io.k8s.display-name="alpine apache php" \
+LABEL io.k8s.description="Alpine linux based Asterisk Container" \
+      io.k8s.display-name="alpine asterisk" \
       io.openshift.expose-services="8088:http,5060:sip" \
       io.openshift.tags="builder,asterisk" \
       io.openshift.min-memory="1Gi" \
