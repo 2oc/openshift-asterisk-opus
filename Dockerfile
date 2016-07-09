@@ -1,4 +1,4 @@
-FROM alpine:3.3
+FROM alpine:3.4
 MAINTAINER Joeri van Dooren <ure@mororless.be>
 
 RUN apk update && apk add tar rsync wget curl asterisk asterisk-sounds-en asterisk-sounds-moh asterisk-sample-config  && \
