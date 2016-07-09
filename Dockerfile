@@ -1,7 +1,7 @@
 FROM alpine:edge
 MAINTAINER Joeri van Dooren <ure@mororless.be>
 
-RUN apk update && apk add tar rsync wget curl asterisk asterisk-dev asterisk-pgsql asterisk-fax asterisk-speex asterisk-curl asterisk-srtp asterisk-sounds-en asterisk-sounds-moh asterisk-sample-config  && \
+RUN apk update && apk add tar rsync wget curl openssl asterisk asterisk-dev asterisk-pgsql asterisk-fax asterisk-speex asterisk-curl asterisk-srtp asterisk-sounds-en asterisk-sounds-moh asterisk-sample-config  && \
 rm -f /var/cache/apk/* && \
 apk upgrade && \
 rm -f /var/cache/apk/*
@@ -10,6 +10,8 @@ rm -f /var/cache/apk/*
 ADD scripts/run.sh /scripts/run.sh
 
 RUN chmod -R 755 /scripts /var/log /etc/asterisk /var/run/asterisk /var/lib/asterisk /var/spool/asterisk && chmod a+rw /etc/passwd /var/log/asterisk /etc/asterisk /var/run/asterisk /var/lib/asterisk /var/spool/asterisk && chown -R root:root /scripts /var/log /etc/asterisk /var/run/asterisk  /var/lib/asterisk /var/spool/asterisk && chmod a+rw /etc/passwd /var/log/asterisk /etc/asterisk /var/run/asterisk /var/lib/asterisk /var/spool/asterisk
+
+RUN chmod a+rwx /var/lib/asterisk/keys
 
 # Exposed Port SIP
 EXPOSE 5060/udp
