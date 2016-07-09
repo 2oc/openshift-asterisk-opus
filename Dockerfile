@@ -1,7 +1,8 @@
 FROM alpine:edge
 MAINTAINER Joeri van Dooren <ure@mororless.be>
 
-RUN apk update && apk add tar rsync wget curl openssl asterisk asterisk-dev asterisk-pgsql asterisk-fax asterisk-speex asterisk-curl asterisk-srtp asterisk-sounds-en asterisk-sounds-moh asterisk-sample-config  && \
+# asterisk-srtp
+RUN apk update && apk add tar rsync wget curl openssl asterisk asterisk-dev asterisk-pgsql asterisk-fax asterisk-speex asterisk-curl asterisk-sounds-en asterisk-sounds-moh asterisk-sample-config  && \
 rm -f /var/cache/apk/* && \
 apk upgrade && \
 rm -f /var/cache/apk/*
