@@ -1,4 +1,4 @@
-FROM alpine:3.0
+FROM alpine:3.1
 MAINTAINER Joeri van Dooren <ure@mororless.be>
 
 # asterisk-srtp
