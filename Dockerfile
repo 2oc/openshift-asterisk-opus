@@ -1,76 +1,27 @@
-FROM centos:7
-MAINTAINER Justin Wilson "sudo.justin.wilson@gmail.com"
-LABEL version=0.1
-LABEL asterisk_version=certified-11-LTS
-ENV REVISION 0.4
-
-# update system and install dependencies for Asterisk
-
-RUN yum install -y \
-		gcc \
-		curl \
-		wget \
-		gcc-c++ \
-		libstdc++-devel \
-		make \
-		ncurses-devel \
-		libxml2-devel \
-		openssl-devel \
-		libuuid-devel \
-		vim \
-		man-db \
-		sqlite \
-		sqlite-devel
-
-
-# create users and directories
-
-# download and extract Asterisk
-ENV ASTERISK_DOWNLOAD_URL http://downloads.asterisk.org/pub/telephony/certified-asterisk/asterisk-certified-11.6-current.tar.gz
-ENV ASTERISK_BUILDDIR /usr/local/src/
-ADD $ASTERISK_DOWNLOAD_URL $ASTERISK_BUILDDIR
-WORKDIR $ASTERISK_BUILDDIR
-RUN tar xvfz *asterisk*gz
-
-###		NEW REVISED SECTION		###
-
-# install dependencies:
-RUN yum install -y svn epel-release \
-	&& yum update -y
-
-RUN yum install -y libcurl-devel openssh openssh-server sudo visudo newt-devel iproute
-
-# was having trouble creating a variables with BASH expansion. I ended up creating a temp file that we can source....
-RUN echo 'ASTERISK_SOURCEDIR=$(ls "$ASTERISK_BUILDDIR"asterisk*[^gz] -d)' >> ~/.astersiskvars
-
-# This is to install dependencies with a tool shipped with the Asterisk source
-RUN source ~/.astersiskvars \
-	&& pushd $ASTERISK_SOURCEDIR/contrib/scripts \
-	&& ./install_prereq install \
-	&& ./install_prereq install-unpackaged \
-	&& pushd $ASTERISK_SOURCEDIR
-
-
-# change to build directory and configure:
-RUN source ~/.astersiskvars \
-	&& cd $ASTERISK_SOURCEDIR \
-	&& ./configure --libdir=/usr/lib64
-
-# You can add what modules you want to be compiled in, as an argument to menuselect/menuselect --enable <MODULE>:
-RUN source ~/.astersiskvars \
-	&& cd $ASTERISK_SOURCEDIR \
-	&& make menuselect.makeopts \
-	&& menuselect/menuselect \
-	--enable chan_sip \
-	--enable CORE-SOUNDS-EN_AU-WAV \
-	--enable CORE-SOUNDS-EN_AU-ULAW \
-	--enable CORE-SOUNDS-EN_AU-ALAW \
-	--enable CORE-SOUNDS-EN_AU-GSM \
-	-- enable CORE-SOUNDS-EN_AU-G729 \
-	--enable CORE-SOUNDS-EN_AU-G722 menuselect.makeopts \
-	&& make \
-	&& make install \
-  && make samples
+FROM centos:latest
+MAINTAINER Gonzalo Marcote "gonzalomarcote@gmail.com"
+RUN yum -y update
+RUN yum -y install vim tar htop
+RUN yum -y install gcc gcc-c++ make wget subversion libxml2-devel ncurses-devel openssl-devel sqlite-devel libuuid-devel vim-enhanced jansson-devel unixODBC unixODBC-devel libtool-ltdl libtool-ltdl-devel subversion speex-devel mysql-devel
+WORKDIR /usr/src
+RUN svn co http://svn.pjsip.org/repos/pjproject/trunk/ pjproject-trunk
+WORKDIR /usr/src/pjproject-trunk
+RUN ./configure --libdir=/usr/lib64 --prefix=/usr --enable-shared --disable-sound --disable-resample --disable-video --disable-opencore-amr CFLAGS='-O2 -DNDEBUG'
+RUN make dep
+RUN make
+RUN make install
+RUN ldconfig
+RUN ldconfig -p | grep pj
+WORKDIR /usr/src
+RUN wget http://downloads.asterisk.org/pub/telephony/certified-asterisk/certified-asterisk-13.1-current.tar.gz
+RUN tar -zxvf certified-asterisk-13.1-current.tar.gz
+WORKDIR /usr/src/certified-asterisk-13.1-cert2
+RUN sh contrib/scripts/get_mp3_source.sh
+COPY menuselect.makeopts /usr/src/certified-asterisk-13.1-cert2/menuselect.makeopts
+RUN ./configure CFLAGS='-g -O2 -mtune=native' --libdir=/usr/lib64
+RUN make
+RUN make install
+RUN make samples
 
 # Run scripts
 ADD scripts/run.sh /scripts/run.sh
