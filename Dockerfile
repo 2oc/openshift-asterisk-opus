@@ -8,7 +8,7 @@ yum install git kernel-headers gcc gcc-c++ cpp ncurses ncurses-devel libxml2 lib
 WORKDIR /tmp
 
 # Download asterisk.
-RUN git clone -b certified/13.8 --depth 1 https://gerrit.asterisk.org/asterisk
+RUN git clone -b 13 --depth 1 https://gerrit.asterisk.org/asterisk
 WORKDIR /tmp/asterisk
 
 # Configure
