@@ -1,4 +1,4 @@
-FROM centos:6.5
+FROM centos:6.8
 MAINTAINER Joeri van Dooren <ure@moreorless.io>
 
 RUN yum update -y && \
