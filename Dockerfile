@@ -3,7 +3,7 @@ MAINTAINER Joeri van Dooren <ure@moreorless.io>
 
 RUN yum update -y
 RUN yum install -y epel-release
-RUN yum install git kernel-headers gcc gcc-c++ cpp ncurses ncurses-devel libxml2 libxml2-devel sqlite sqlite-devel openssl-devel newt-devel kernel-devel libuuid-devel net-snmp-devel xinetd tar jansson-devel make bzip2 -y
+RUN yum install git kernel-headers gcc gcc-c++ cpp ncurses ncurses-devel libxml2 libxml2-devel sqlite sqlite-devel openssl-devel newt-devel kernel-devel libuuid-devel net-snmp-devel xinetd tar jansson-devel make bzip2 libsrtp libsrtp-devel -y
 
 WORKDIR /tmp
 # Get pj project
