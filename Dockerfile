@@ -16,9 +16,10 @@ RUN ./configure --libdir=/usr/lib64
 
 # Remove the native build option
 # from: https://wiki.asterisk.org/wiki/display/AST/Building+and+Installing+Asterisk
+#   --disable BUILD_NATIVE \
+
 RUN make menuselect.makeopts
 RUN menuselect/menuselect \
-  --disable BUILD_NATIVE \
   --enable cdr_csv \
   --enable chan_sip \
   --enable res_http_websocket \
