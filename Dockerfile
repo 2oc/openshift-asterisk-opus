@@ -12,7 +12,7 @@ RUN git clone -b 13 --depth 1 https://gerrit.asterisk.org/asterisk
 WORKDIR /tmp/asterisk
 
 # Configure
-RUN ./configure --libdir=/usr/lib64
+RUN ./configure CFLAGS='-g -O2 -mtune=native' --libdir=/usr/lib64
 
 # Remove the native build option
 # from: https://wiki.asterisk.org/wiki/display/AST/Building+and+Installing+Asterisk
