@@ -28,7 +28,7 @@ yum install subversion patch wget git kernel-headers gcc gcc-c++ cpp ncurses ncu
   rm -fr /tmp/* && \
   sed -i -e 's/# MAXFILES=/MAXFILES=/' /usr/sbin/safe_asterisk && \
   rpm -qa | grep devel | xargs rpm -e --nodeps && \
-  rpm -e subversion patch wget git kernel-headers gcc gcc-c++ cpp xinetd tar make bzip2 doxygen texinfo && \
+  rpm -e subversion gcc gcc-c++ cpp xinetd doxygen texinfo && \
   rm -fr /usr/share/man/* /usr/share/doc/*
 
 # Run scripts
