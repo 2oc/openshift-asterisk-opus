@@ -1,17 +1,29 @@
-FROM centos:6.8
+FROM centos:7
 MAINTAINER Joeri van Dooren <ure@moreorless.io>
 
 RUN yum update -y && \
 yum install -y epel-release && \
-yum install git kernel-headers gcc gcc-c++ cpp ncurses ncurses-devel libxml2 libxml2-devel sqlite sqlite-devel openssl-devel newt-devel kernel-devel libuuid-devel net-snmp-devel xinetd tar jansson-devel make bzip2 libsrtp libsrtp-devel -y
+yum install patch wget git kernel-headers gcc gcc-c++ cpp ncurses ncurses-devel libxml2 libxml2-devel sqlite sqlite-devel openssl-devel newt-devel kernel-devel libuuid-devel net-snmp-devel xinetd tar jansson-devel make bzip2 libsrtp libsrtp-devel -y
 
 WORKDIR /tmp
+
+RUN wget http://downloads.xiph.org/releases/opus/opus-1.1.2.tar.gz && tar xvzf opus-1.1.2.tar.gz
+
+WORKDIR /tmp/opus-1.1.2
+
+RUN ./configure && make && make install
+
+WORKDIR /tmp
+
+RUN git clone https://github.com/seanbright/asterisk-opus
 
 # Download asterisk.
 RUN git clone -b 13 --depth 1 https://gerrit.asterisk.org/asterisk
 WORKDIR /tmp/asterisk
 
 # Configure
+RUN cp ../asterisk-opus/codecs/* codecs/ && cp ../asterisk-opus/formats/* formats/ && patch -p1 < ../asterisk-opus/asterisk.patch
+
 RUN ./configure CFLAGS='-g -O2 -mtune=native' --libdir=/usr/lib64
 
 # Remove the native build option
@@ -25,7 +37,10 @@ RUN menuselect/menuselect \
   --enable res_http_websocket \
   --enable res_srtp \
   --enable res_hep_rtcp \
-  menuselect.makeopts
+  --enable codec_opus \
+  --enable format_vp8
+
+RUN make menuselect.makeopts
 
 # Continue with a standard make.
 RUN make
